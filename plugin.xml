@@ -23,9 +23,6 @@
         <clobbers target="L"/>
     </js-module>
 
-    <asset src="www/libs" target="libs"></asset>
-    <asset src="www/css" target="css"></asset>
-    <asset src="www/images" target="images"></asset>
 
 
     <dependency id="org.apache.cordova.file"/>

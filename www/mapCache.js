@@ -1,4 +1,4 @@
-var localMapCache = function () {
+var localMapCache = (function () {
     var MAP = null;
     var FILESYSTEM = null;
 
@@ -35,13 +35,13 @@ var localMapCache = function () {
         document.getElementsByTagName("head")[0].appendChild(fileref);
     };
 
-    function init(id) {
+    function init(id, callback) {
         log("init");
         if (MAP !== null) {
-            return "Already initialized that plugin";
+            callback({error: "Already initialized that plugin"});
         }
         if (document.getElementById(id) === null) {
-            return "Element '" + id + "' could not be founded";
+            callback({error: "Element '" + id + "' could not be founded"});
         }
         insertCss("css/leaflet.css");
         $.getScript("libs/event.js").done(function () {
@@ -49,7 +49,7 @@ var localMapCache = function () {
                 .on('storageLoaded', function (storage) {
                     log("storage is:");
                     log(storage);
-                    initializeMap(id, storage);
+                    initializeMap(id, callback, storage);
                 });
             $.getScript("libs/storage.js").done(function () {
                 $.getScript("libs/map.js").done(function () {
@@ -58,10 +58,9 @@ var localMapCache = function () {
                 });
             });
         });
-        return true;
     };
 
-    function initializeMap(selector, storage) {
+    function initializeMap(selector, callback, storage) {
         log("Map Init");
         MAP = L.map(selector, {
             center: [52.521809, 13.412848],
@@ -79,28 +78,24 @@ var localMapCache = function () {
         new StorageTileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {storage: storage, log: log}).addTo(MAP);
         log("After storage init");
         MAP
-            .locate({watch: true, setView: true, maxZoom: 18})
-            .on('locationfound', locationFound)
+            .locate({watch: true, setView: true, maximumAge: 0, enableHighAccuracy: true})
+            .on('locationfound', function (pos) {
+                console.log("Location found");
+                localMapCache.location = pos.latlng;
+                callback({position: pos.latlng});
+            })
             .on('locationerror', function (e) {
-                log(e);
                 log("LOCATION ERROR");
+                log(e);
+                callback({error: "Location error"});
+
             });
         log("adding tile Layer: done");
     };
 
-
-    function locationFound(loc) {
-        console.log("Location found");
-        localMapCache.location = e.latlng;
-        alert("Location found");
-    };
-
-
     return {
         'initialize': init
     };
-}
-
-    ();
+}());
 
 module.exports = localMapCache;
