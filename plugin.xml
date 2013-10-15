@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+           id="de.pfeffermind.mapcache"
+      version="0.1.0">
+    <name>MapCachePlugin</name>
+    <description>
+		This plugin offers a interface to get cached maptiles from a service like cloudmade. 
+		Already downloaded tiles will be served directly. 
+		Not downloaded tiles will be downloaded and cached locally.
+	</description>
+    <license>MIT</license>
+    <keywords>phonegap,map,cache,leafletjs,cloudmade</keywords>
+ 
+ 	<engines>
+	    <engine name="cordova" version=">=3.0.0" />
+	</engines>
+	<author>Sebastian Zillessen</author>
+ 
+    <js-module src="www/mapCache.js" name="MapCache">
+        <clobbers target="mapCache" />
+    </js-module>
+	<js-module src="www/libs/leaflet.js" name="Leaflet">
+		<clobbers target="L"/>
+	</js-module>
+    <js-module src="www/libs/files.js" name="FileUtils">
+        <clobbers target="fileUtils" />
+    </js-module>
+    <js-module src="www/libs/tiles.js" name="TileUtils">
+        <clobbers target="tileUtils" />
+    </js-module>
+	
+    <!--<asset src="www/libs" target="libs"></asset>-->
+	<asset src="www/css" target="css"></asset>
+	<asset src="www/images" target="images"></asset>	
+
+	
+	<dependency id="org.apache.cordova.file" />
+	<dependency id="org.apache.cordova.file-transfer"/>
+</plugin>
