@@ -41,16 +41,17 @@
             this.log("_LoadTile");
             this._adjustTilePoint(tilePoint);
             var key = tilePoint.z + ',' + tilePoint.y + ',' + tilePoint.x;
-
             var self = this;
             if (this.options.storage) {
                 this.options.storage.get(key, function (value) {
+                    console.log("   storage returned on '" + key + "'='" + value + "'");
                     if (value) {
                         self._setUpTile(tile, key, value, false);
                     } else {
                         self._setUpTile(tile, key, self.getTileUrl(tilePoint), true);
                     }
                 }, function () {
+                    console.log("   storage failed on '" + key + "'");
                     self._setUpTile(tile, key, self.getTileUrl(tilePoint), true);
                 });
             } else {
